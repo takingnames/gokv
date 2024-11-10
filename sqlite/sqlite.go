@@ -26,6 +26,7 @@ type Options struct {
 	// Encoding format.
 	// Optional (encoding.JSON by default).
 	Codec encoding.Codec
+        Db *gosql.DB
 }
 
 // DefaultOptions is an Options object with default values.
@@ -52,30 +53,39 @@ func NewClient(options Options) (Client, error) {
 		options.Path = DefaultOptions.Path
 	}
 
-	db, err := gosql.Open("sqlite", options.Path)
-	if err != nil {
-		return result, err
-	}
+
+        var db *gosql.DB
+        var err error
+
+        if options.Db != nil {
+                db = options.Db
+        } else {
+
+                db, err = gosql.Open("sqlite", options.Path)
+                if err != nil {
+                        return result, err
+                }
+        }
 
 	err = db.Ping()
 	if err != nil {
 		return result, err
 	}
 
-	const q = `
-	PRAGMA foreign_keys = ON;
-	PRAGMA synchronous = NORMAL;
-	PRAGMA journal_mode = 'WAL';
-	PRAGMA cache_size = -64000;
-	`
+	//const q = `
+	//PRAGMA foreign_keys = ON;
+	//PRAGMA synchronous = NORMAL;
+	//PRAGMA journal_mode = 'WAL';
+	//PRAGMA cache_size = -64000;
+	//`
 
-	_, err = db.Exec(q)
+	//_, err = db.Exec(q)
 
-	db.SetMaxOpenConns(1)
+	//db.SetMaxOpenConns(1)
 
-	if err != nil {
-		return result, err
-	}
+	//if err != nil {
+	//	return result, err
+	//}
 
 	// Create table if it doesn't exist yet.
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS " + options.TableName + " (k TEXT PRIMARY KEY, v BLOB NOT NULL)")
