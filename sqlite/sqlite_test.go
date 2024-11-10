@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/philippgille/gokv/encoding"
-	"github.com/philippgille/gokv/sqlite"
+	"github.com/takingnames/gokv/sqlite"
 	"github.com/philippgille/gokv/test"
 )
 
