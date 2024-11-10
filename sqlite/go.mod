@@ -1,4 +1,4 @@
-module github.com/philippgille/gokv/sqlite
+module github.com/takingnames/gokv/sqlite
 
 go 1.20
 
